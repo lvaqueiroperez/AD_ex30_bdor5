@@ -46,12 +46,54 @@ public class Ex30_bdor5 {
      descuento: 10
      */
     public void insertarLinea() {
+        //OJO! ESTAMOS INSERTANDO UNA LÍNEA DE PEDIDO MÁS EN UN PEDIDO YA EXISTENTE
+        //
+        try {
+            PreparedStatement ps
+                    = conn.prepareStatement("insert into the (select a.pedido from pedido_tab a where a.ordnum = ?)select ?,ref(b),?,? from item_tab b where b.itemnum = ?");
+
+            ps.setInt(1, 4001);
+            ps.setInt(2, 48);
+            ps.setInt(3, 20);
+            ps.setInt(4, 10);
+            ps.setInt(5, 2004);
+
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Ex30_bdor5.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void modificaLinea() {
 
         try {
             PreparedStatement ps
-                    = conn.prepareStatement("insert into pedido_tab values(987,pedido(lineas_pedido_t(48,deref(item).itemnum(2004),20,10)))");
+                    = conn.prepareStatement("update cliente_tab set clinomb = ? where clinum = ? ");
 
-            ps.executeQuery();
+            ps.setString(1, "Alvaro Luna");
+            ps.setInt(2, 5);
+
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Ex30_bdor5.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void borraLinea() {
+
+        //ordnum 4001
+        //linum 48
+        //NO VA EN JAVA PERO SI EN TERMINAL????
+        try {
+            PreparedStatement ps
+                    = conn.prepareStatement("delete from the (select b.pedido from pedido_tab b where b.ordnum = ?)where linum = ?");
+
+            ps.setInt(1, 4001);
+            ps.setInt(2, 48);
 
         } catch (SQLException ex) {
             Logger.getLogger(Ex30_bdor5.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,7 +108,9 @@ public class Ex30_bdor5 {
         try {
             obj.Conexion();
 
-            obj.insertarLinea();
+            //obj.insertarLinea();
+            //obj.modificaLinea();
+            obj.borraLinea();
 
             obj.Cerrar();
         } catch (SQLException ex) {
